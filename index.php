@@ -8,6 +8,7 @@ use Google\CloudFunctions\FunctionsFramework;
 use Psr\Http\Message\ServerRequestInterface;
 use yananob\MyTools\Logger;
 use yananob\MyTools\Line;
+use yananob\MyTools\Utils;
 use yananob\MyGcpTools\CFUtils;
 
 FunctionsFramework::http('main', 'main');
@@ -23,7 +24,8 @@ function main(ServerRequestInterface $request): string
     $isLocal = CFUtils::isLocalHttp($request);
     $logger->log("Running as " . ($isLocal ? "local" : "cloud") . " mode");
 
-    $line = new Line(__DIR__ . "/configs/line.json");
+    $lineConfig = Utils::getConfig(__DIR__ . "/configs/line.json");
+    $line = new Line($lineConfig["tokens"], $lineConfig["target_ids"]);
     $smarty = new Smarty();
     $smarty->setTemplateDir(__DIR__ . "/templates");
     $smarty->assign("targets", $line->getTargets());
@@ -44,7 +46,7 @@ function main(ServerRequestInterface $request): string
         $message = $body["message"];
 
         // MEMO: UIのシンプル化のために、botとtargetが同じであることを前提にしている
-        $line->sendMessage(
+        $line->sendPush(
             bot: $target,
             target: $target,
             message: $message,
