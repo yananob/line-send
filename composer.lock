@@ -267,16 +267,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.431.0",
+            "version": "v0.432.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "0a3b9c8feb2ed473eb4e47214edd3211e8c29045"
+                "reference": "c0d8b801cf615f8edf1b5b356a3d121d0c95ef92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/0a3b9c8feb2ed473eb4e47214edd3211e8c29045",
-                "reference": "0a3b9c8feb2ed473eb4e47214edd3211e8c29045",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/c0d8b801cf615f8edf1b5b356a3d121d0c95ef92",
+                "reference": "c0d8b801cf615f8edf1b5b356a3d121d0c95ef92",
                 "shasum": ""
             },
             "require": {
@@ -305,9 +305,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.431.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.432.0"
             },
-            "time": "2026-02-02T01:06:19+00:00"
+            "time": "2026-02-09T01:14:27+00:00"
         },
         {
             "name": "google/auth",
@@ -4024,14 +4024,14 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "yananob/my-gcp-tools": 20,
-        "yananob/my-tools": 20
+        "yananob/my-tools": 20,
+        "yananob/my-gcp-tools": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">= 8.2"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
