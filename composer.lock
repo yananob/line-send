@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21ed0e2e5af5818606e1ab73f62f3a1c",
+    "content-hash": "ff81c7369f8d46b3d19ef6f7b29a4d5e",
     "packages": [
         {
             "name": "cloudevents/sdk-php",
@@ -2784,7 +2784,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">= 8.2"
+        "php": "~8.2.0"
     },
     "platform-dev": {},
     "platform-overrides": {
