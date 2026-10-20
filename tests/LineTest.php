@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MyApp\Tests;
+namespace App\Tests;
 
-use MyApp\Line;
+use App\Line;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;

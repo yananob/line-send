@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use App\CFUtils;
+use App\Line;
+use eftec\bladeone\BladeOne;
 use Google\CloudFunctions\FunctionsFramework;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
 use Psr\Http\Message\ServerRequestInterface;
-use Smarty\Smarty;
-use MyApp\Logger;
-use MyApp\Line;
-use MyApp\Utils;
-use MyApp\CFUtils;
 
 FunctionsFramework::http('main', 'main');
 function main(ServerRequestInterface $request): string
 {
-    $logger = new Logger("line-sender");
+    $logger = new Logger('line-sender');
+    $logger->pushHandler(new StreamHandler('php://stderr', Level::Info));
+
     $query = $request->getQueryParams();
     $body = $request->getParsedBody();
 
@@ -29,14 +32,27 @@ function main(ServerRequestInterface $request): string
         }
     }
 
-    $logger->log(str_repeat("-", 120));
-    $logger->log("Query: " . json_encode($query));
-    $logger->log("Body: " . json_encode($body));
+    $logger->info(str_repeat("-", 120));
+    $logger->info("Query: " . json_encode($query));
+    $logger->info("Body: " . json_encode($body));
 
     $isLocal = CFUtils::isLocalHttp($request);
-    $logger->log("Running as " . ($isLocal ? "local" : "cloud") . " mode");
+    $logger->info("Running as " . ($isLocal ? "local" : "cloud") . " mode");
 
-    $lineConfig = Utils::getConfig(__DIR__ . "/configs/line.json");
+    $configPath = __DIR__ . "/configs/line.json";
+    if (!file_exists($configPath)) {
+        throw new \RuntimeException("Config file not found: {$configPath}");
+    }
+    $content = file_get_contents($configPath);
+    if ($content === false) {
+        throw new \RuntimeException("Failed to read config file: {$configPath}");
+    }
+    /** @var array<string, mixed>|null $lineConfig */
+    $lineConfig = json_decode($content, true);
+    if (!is_array($lineConfig)) {
+        throw new \RuntimeException("Invalid JSON format in config file: {$configPath}");
+    }
+
     if (!isset($lineConfig["tokens"]) || !is_array($lineConfig["tokens"])) {
         throw new \InvalidArgumentException("Config missing or invalid 'tokens' key.");
     }
@@ -50,16 +66,25 @@ function main(ServerRequestInterface $request): string
     $targetIds = $lineConfig["target_ids"];
 
     $line = new Line($tokens, $targetIds);
-    $smarty = new Smarty();
-    $smarty->setTemplateDir(__DIR__ . "/templates");
-    $smarty->assign("targets", $line->getTargets());
-    $smarty->assign("baseUrl", CFUtils::getBaseUrl($isLocal, $request));
+    $views = __DIR__ . "/templates";
+    $cache = sys_get_temp_dir() . "/blade_cache";
+    if (!is_dir($cache)) {
+        @mkdir($cache, 0777, true);
+    }
+    $blade = new BladeOne($views, $cache, BladeOne::MODE_AUTO);
+
+    $baseUrl = CFUtils::getBaseUrl($isLocal, $request);
+    $targets = $line->getTargets();
 
     if (empty($body)) {
-        $logger->log("GET");
-        return $smarty->fetch('form.tpl');
+        $logger->info("GET");
+        return $blade->run('form', [
+            'targets' => $targets,
+            'baseUrl' => $baseUrl,
+            'notification' => null,
+        ]);
     } else {
-        $logger->log("POST");
+        $logger->info("POST");
         if (!array_key_exists("target", $body) || !is_string($body["target"]) || $body["target"] === '') {
             throw new \InvalidArgumentException("target was not passed or invalid");
         }
@@ -77,8 +102,11 @@ function main(ServerRequestInterface $request): string
         );
 
         if (array_key_exists("source", $body) && $body["source"] === "form") {
-            $smarty->assign("notification", "Message was successfully sent!");
-            return $smarty->fetch('form.tpl');
+            return $blade->run('form', [
+                'targets' => $targets,
+                'baseUrl' => $baseUrl,
+                'notification' => "Message was successfully sent!",
+            ]);
         } else {
             return "";
         }
