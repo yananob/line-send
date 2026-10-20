@@ -10,20 +10,20 @@
 
 <body>
     <div class="container mt-5">
-        {if !empty($notification)}
-        <div class="alert alert-primary" role="alert">{$notification}</div>
-        {/if}
+        @if(!empty($notification))
+        <div class="alert alert-primary" role="alert">{{ $notification }}</div>
+        @endif
 
-        <form method="POST" action="{$baseUrl}">
+        <form method="POST" action="{{ $baseUrl }}">
             <div class="mb-3">
                 <label class="form-label">Target:</label><br>
-                {foreach from=$targets item=target}
+                @foreach($targets as $target)
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="target" id="{$target}" value="{$target}"
+                    <input class="form-check-input" type="radio" name="target" id="{{ $target }}" value="{{ $target }}"
                         required>
-                    <label class="form-check-label" for="{$target}">{$target}</label>
+                    <label class="form-check-label" for="{{ $target }}">{{ $target }}</label>
                 </div>
-                {/foreach}
+                @endforeach
             </div>
 
             <div class="mb-3">

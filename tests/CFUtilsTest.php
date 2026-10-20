@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace MyApp\Tests;
+namespace App\Tests;
 
-use MyApp\CFUtils;
+use App\CFUtils;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
