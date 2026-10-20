@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace MyApp;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Exception;
 
 class Line
@@ -46,24 +48,32 @@ class Line
         $targetId = $this->targetIds[$target] ?? $target;
         $token = $this->tokens[$bot];
 
-        $response = $this->client->post('https://api.line.me/v2/bot/message/push', [
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $token,
-            ],
-            'json' => [
-                'to' => $targetId,
-                'messages' => [
-                    [
-                        'type' => 'text',
-                        'text' => $message,
+        try {
+            $response = $this->client->post('https://api.line.me/v2/bot/message/push', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token,
+                ],
+                'json' => [
+                    'to' => $targetId,
+                    'messages' => [
+                        [
+                            'type' => 'text',
+                            'text' => $message,
+                        ],
                     ],
                 ],
-            ],
-        ]);
+            ]);
 
-        if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
-            throw new Exception("Failed to send LINE message. Status code: " . $response->getStatusCode());
+            if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
+                throw new Exception("Failed to send LINE message. Status code: " . $response->getStatusCode());
+            }
+        } catch (RequestException $e) {
+            $response = $e->getResponse();
+            $statusCode = $response !== null ? $response->getStatusCode() : $e->getCode();
+            throw new Exception("Failed to send LINE message. Status code: {$statusCode}", 0, $e);
+        } catch (GuzzleException $e) {
+            throw new Exception("Failed to send LINE message. Status code: " . $e->getCode(), 0, $e);
         }
     }
 }

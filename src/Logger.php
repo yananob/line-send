@@ -12,10 +12,14 @@ class Logger
 {
     private MonologLogger $logger;
 
-    public function __construct(string $name = 'app')
+    /**
+     * @param string $name
+     * @param string|resource $stream
+     */
+    public function __construct(string $name = 'app', mixed $stream = 'php://output')
     {
         $this->logger = new MonologLogger($name);
-        $this->logger->pushHandler(new StreamHandler('php://stdout', Level::Info));
+        $this->logger->pushHandler(new StreamHandler($stream, Level::Info));
     }
 
     public function log(string $message): void
