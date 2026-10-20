@@ -1,13 +1,13 @@
 name: Deploy Cloud Functions (production)
 
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 concurrency:
-  group: ${{ vars.FUNCTION_NAME || '{{VALUES_FUNCTION_NAME}}' }}-deploy-production
+  group: ${{ vars.FUNCTION_NAME || 'line-send' }}-deploy-production
   cancel-in-progress: true
 
 permissions:
@@ -15,7 +15,7 @@ permissions:
   id-token: 'write'
 
 env:
-  FUNCTION_NAME: ${{ vars.FUNCTION_NAME || '{{VALUES_FUNCTION_NAME}}' }}
+  FUNCTION_NAME: ${{ vars.FUNCTION_NAME || 'line-send' }}
 
 jobs:
   prepare:
