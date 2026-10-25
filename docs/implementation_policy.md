@@ -8,7 +8,7 @@
 
 本アプリケーションは、Google Cloud Functions を基盤としたサーバーレスアーキテクチャを採用しています。
 
-- **ランタイム**: PHP 8.2 以上
+- **ランタイム**: PHP 8.4 以上
 - **データベース**: Google Cloud Firestore (Native Mode)
 - **ビュー**: BladeOne を使用してテンプレートを描画します。
 - **エントリポイント (`index.php`)**:
@@ -47,7 +47,8 @@ Google Cloud PHP クライアントライブラリを使用する場合、JSON �
 ```php
 $config = json_decode(getenv("FIREBASE_SERVICE_ACCOUNT"), true);
 $firestore = new FirestoreClient([
-    "keyFile" => $config
+    "keyFile" => $config,
+    "transport" => "rest",
 ]);
 ```
 
