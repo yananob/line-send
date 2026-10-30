@@ -6,7 +6,7 @@
         "php": "^8.2 || ^8.4",
         "google/cloud-functions-framework": "^1.3",
         "google/protobuf": "^5.35",
-        "eftec/bladeone": "^4.19",
+        "eftec/bladeone": "^5.0",
         "guzzlehttp/guzzle": "^7.8",
         "monolog/monolog": "^3.0"
     },
