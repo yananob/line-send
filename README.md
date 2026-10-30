@@ -23,20 +23,20 @@ composer install
 git submodule update --init --recursive
 ```
 
-### 3. 設定ファイルの作成
+### 3. 環境変数の設定
 
-`configs/line.json` を作成し、LINE Botのトークンと送信先IDを設定します。
+環境変数 `LINE_TOKENS_N_TARGETS` に、LINE Botのトークンと送信先IDをJSON形式で設定します。
 `tokens` と `target_ids` のキー名を一致させることで、UIからの送信が可能になります。
 
-```json
-{
+```bash
+export LINE_TOKENS_N_TARGETS='{
     "tokens": {
         "my_bot": "YOUR_LINE_CHANNEL_ACCESS_TOKEN"
     },
     "target_ids": {
         "my_bot": "YOUR_LINE_USER_OR_GROUP_ID"
     }
-}
+}'
 ```
 
 ## ローカルでの実行
