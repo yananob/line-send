@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aecf5510f324bcfffb65a91af3216265",
+    "content-hash": "3ceaa11970c7c3740f7d02ae36ccddc6",
     "packages": [
         {
             "name": "cloudevents/sdk-php",
@@ -66,24 +66,23 @@
         },
         {
             "name": "eftec/bladeone",
-            "version": "4.19.1",
+            "version": "5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EFTEC/BladeOne.git",
-                "reference": "a22f6471c01c26fea5f6a0d0aca9b5674fc999be"
+                "reference": "f5fa190c36b007086e8c0140c19214e2e45c45d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/a22f6471c01c26fea5f6a0d0aca9b5674fc999be",
-                "reference": "a22f6471c01c26fea5f6a0d0aca9b5674fc999be",
+                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/f5fa190c36b007086e8c0140c19214e2e45c45d9",
+                "reference": "f5fa190c36b007086e8c0140c19214e2e45c45d9",
                 "shasum": ""
             },
             "require": {
-                "ext-json": "*",
-                "php": ">=7.4"
+                "php": ">=8.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.5.23"
+                "phpunit/phpunit": "^10.5"
             },
             "suggest": {
                 "eftec/bladeonehtml": "Extension to create forms",
@@ -119,9 +118,9 @@
             ],
             "support": {
                 "issues": "https://github.com/EFTEC/BladeOne/issues",
-                "source": "https://github.com/EFTEC/BladeOne/tree/4.19.1"
+                "source": "https://github.com/EFTEC/BladeOne/tree/5.0"
             },
-            "time": "2025-09-03T20:50:39+00:00"
+            "time": "2026-10-03T17:18:32+00:00"
         },
         {
             "name": "google/cloud-functions-framework",
@@ -1298,11 +1297,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.3.1",
+            "version": "2.3.2",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/6155239b488e95d26d1ebd95c6b4bb294d7f09db",
-                "reference": "6155239b488e95d26d1ebd95c6b4bb294d7f09db",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/18bc23a0682f08591529377d271b5c4dfe9ed1dd",
+                "reference": "18bc23a0682f08591529377d271b5c4dfe9ed1dd",
                 "shasum": ""
             },
             "require": {
@@ -1358,7 +1357,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-08T21:09:11+00:00"
+            "time": "2026-10-24T11:36:00+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2784,11 +2783,11 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~8.2.0"
+        "php": "^8.2 || ^8.4"
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.2"
+        "php": "8.4"
     },
     "plugin-api-version": "2.9.0"
 }

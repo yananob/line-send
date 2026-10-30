@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use App\AppConfig;
 use App\CFUtils;
 use App\Line;
 use eftec\bladeone\BladeOne;
@@ -13,8 +14,9 @@ use Monolog\Level;
 use Monolog\Logger;
 use Psr\Http\Message\ServerRequestInterface;
 
-FunctionsFramework::http('main', 'main');
-function main(ServerRequestInterface $request): string
+FunctionsFramework::http('main_http', 'main_http');
+
+function main_http(ServerRequestInterface $request): string
 {
     $logger = new Logger('line-sender');
     $logger->pushHandler(new StreamHandler('php://stderr', Level::Info));
@@ -39,30 +41,8 @@ function main(ServerRequestInterface $request): string
     $isLocal = CFUtils::isLocalHttp($request);
     $logger->info("Running as " . ($isLocal ? "local" : "cloud") . " mode");
 
-    $configPath = __DIR__ . "/configs/line.json";
-    if (!file_exists($configPath)) {
-        throw new \RuntimeException("Config file not found: {$configPath}");
-    }
-    $content = file_get_contents($configPath);
-    if ($content === false) {
-        throw new \RuntimeException("Failed to read config file: {$configPath}");
-    }
-    /** @var array<string, mixed>|null $lineConfig */
-    $lineConfig = json_decode($content, true);
-    if (!is_array($lineConfig)) {
-        throw new \RuntimeException("Invalid JSON format in config file: {$configPath}");
-    }
-
-    if (!isset($lineConfig["tokens"]) || !is_array($lineConfig["tokens"])) {
-        throw new \InvalidArgumentException("Config missing or invalid 'tokens' key.");
-    }
-    if (!isset($lineConfig["target_ids"]) || !is_array($lineConfig["target_ids"])) {
-        throw new \InvalidArgumentException("Config missing or invalid 'target_ids' key.");
-    }
-
-    /** @var array<string, string> $tokens */
+    $lineConfig = AppConfig::getLineConfig();
     $tokens = $lineConfig["tokens"];
-    /** @var array<string, string> $targetIds */
     $targetIds = $lineConfig["target_ids"];
 
     $line = new Line($tokens, $targetIds);
