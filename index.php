@@ -13,15 +13,9 @@ use Monolog\Level;
 use Monolog\Logger;
 use Psr\Http\Message\ServerRequestInterface;
 
-FunctionsFramework::http('main', 'main');
 FunctionsFramework::http('main_http', 'main_http');
 
 function main_http(ServerRequestInterface $request): string
-{
-    return main($request);
-}
-
-function main(ServerRequestInterface $request): string
 {
     $logger = new Logger('line-sender');
     $logger->pushHandler(new StreamHandler('php://stderr', Level::Info));
