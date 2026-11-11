@@ -45,16 +45,16 @@ class AppConfig
 
         $tokens = [];
         foreach ($rawTokens as $key => $val) {
-            if (!is_string($key) || $key === '' || !is_string($val) || $val === '') {
-                throw new InvalidArgumentException("Environment variable LINE_TOKENS_N_TARGETS 'tokens' must only contain non-empty string keys and values.");
+            if (!is_string($key) || $key === '') {
+                throw new InvalidArgumentException("Environment variable LINE_TOKENS_N_TARGETS 'tokens' must only contain non-empty string keys.");
             }
             $tokens[$key] = $val;
         }
 
         $targetIds = [];
         foreach ($rawTargetIds as $key => $val) {
-            if (!is_string($key) || $key === '' || !is_string($val) || $val === '') {
-                throw new InvalidArgumentException("Environment variable LINE_TOKENS_N_TARGETS 'target_ids' must only contain non-empty string keys and values.");
+            if (!is_string($key) || $key === '') {
+                throw new InvalidArgumentException("Environment variable LINE_TOKENS_N_TARGETS 'target_ids' must only contain non-empty string keys.");
             }
             $targetIds[$key] = $val;
         }
