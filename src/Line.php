@@ -28,7 +28,10 @@ class Line
     {
         $this->tokens = $tokens;
         $this->targetIds = $targetIds;
-        $this->client = $client ?? new Client();
+        $this->client = $client ?? new Client([
+            'timeout' => 10.0,
+            'connect_timeout' => 5.0,
+        ]);
     }
 
     /**
@@ -71,7 +74,21 @@ class Line
         } catch (RequestException $e) {
             $response = $e->getResponse();
             $statusCode = $response !== null ? $response->getStatusCode() : $e->getCode();
-            throw new Exception("Failed to send LINE message. Status code: {$statusCode}", 0, $e);
+            $errorDetail = '';
+            if ($response !== null) {
+                $rawBody = (string) $response->getBody();
+                $decoded = json_decode($rawBody, true);
+                if (is_array($decoded) && isset($decoded['message']) && is_string($decoded['message'])) {
+                    $errorDetail = ": {$decoded['message']}";
+                    if (isset($decoded['details']) && is_array($decoded['details'])) {
+                        $detailsStr = json_encode($decoded['details']);
+                        $errorDetail .= " ({$detailsStr})";
+                    }
+                } elseif ($rawBody !== '') {
+                    $errorDetail = ": {$rawBody}";
+                }
+            }
+            throw new Exception("Failed to send LINE message. Status code: {$statusCode}{$errorDetail}", 0, $e);
         } catch (GuzzleException $e) {
             throw new Exception("Failed to send LINE message. Status code: " . $e->getCode(), 0, $e);
         }

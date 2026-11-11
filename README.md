@@ -57,8 +57,14 @@ Google Cloud SDK (gcloud) がセットアップされている環境で、以下
 
 ## テスト
 
-PHPStanによる静的解析を実行します。
+### 静的解析 (PHPStan)
 
 ```bash
 ./tests/run_tests.sh
+```
+
+### ユニットテスト (PHPUnit)
+
+```bash
+./vendor/bin/phpunit tests/
 ```

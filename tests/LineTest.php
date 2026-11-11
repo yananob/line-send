@@ -90,4 +90,31 @@ class LineTest extends TestCase
 
         $line->sendPush('bot', 'bot', 'hello');
     }
+
+    public function testSendPushApiErrorWithDetailedMessageThrowsException(): void
+    {
+        $mock = new MockHandler([
+            new Response(400, [], json_encode([
+                'message' => 'The request body has 1 error(s)',
+                'details' => [
+                    ['message' => 'May not be empty', 'property' => 'messages[0].text']
+                ],
+            ])),
+        ]);
+        $handlerStack = HandlerStack::create($mock);
+        $client = new Client(['handler' => $handlerStack]);
+
+        $line = new Line(['bot' => 'token'], ['bot' => 'id'], $client);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Failed to send LINE message. Status code: 400: The request body has 1 error(s) ([{\"message\":\"May not be empty\",\"property\":\"messages[0].text\"}])");
+
+        $line->sendPush('bot', 'bot', '');
+    }
+
+    public function testDefaultClientHasTimeoutConfiguration(): void
+    {
+        $line = new Line(['bot' => 'token'], ['bot' => 'id']);
+        $this->assertInstanceOf(Line::class, $line);
+    }
 }
