@@ -48,8 +48,8 @@ function main_http(ServerRequestInterface $request): string
     $line = new Line($tokens, $targetIds);
     $views = __DIR__ . "/templates";
     $cache = sys_get_temp_dir() . "/blade_cache";
-    if (!is_dir($cache)) {
-        @mkdir($cache, 0777, true);
+    if (!is_dir($cache) && !@mkdir($cache, 0777, true) && !is_dir($cache)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', $cache));
     }
     $blade = new BladeOne($views, $cache, BladeOne::MODE_AUTO);
 
