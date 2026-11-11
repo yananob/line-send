@@ -38,10 +38,26 @@ class AppConfig
             throw new InvalidArgumentException("Environment variable LINE_TOKENS_N_TARGETS missing or invalid 'target_ids' key.");
         }
 
-        /** @var array<string, string> $tokens */
-        $tokens = $lineConfig['tokens'];
-        /** @var array<string, string> $targetIds */
-        $targetIds = $lineConfig['target_ids'];
+        /** @var array<mixed, mixed> $rawTokens */
+        $rawTokens = $lineConfig['tokens'];
+        /** @var array<mixed, mixed> $rawTargetIds */
+        $rawTargetIds = $lineConfig['target_ids'];
+
+        $tokens = [];
+        foreach ($rawTokens as $key => $val) {
+            if (!is_string($key) || $key === '') {
+                throw new InvalidArgumentException("Environment variable LINE_TOKENS_N_TARGETS 'tokens' must only contain non-empty string keys.");
+            }
+            $tokens[$key] = $val;
+        }
+
+        $targetIds = [];
+        foreach ($rawTargetIds as $key => $val) {
+            if (!is_string($key) || $key === '') {
+                throw new InvalidArgumentException("Environment variable LINE_TOKENS_N_TARGETS 'target_ids' must only contain non-empty string keys.");
+            }
+            $targetIds[$key] = $val;
+        }
 
         return [
             'tokens' => $tokens,

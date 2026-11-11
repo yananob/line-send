@@ -29,6 +29,31 @@ class CFUtilsTest extends TestCase
         $this->assertTrue(CFUtils::isLocalHttp($request));
     }
 
+    public function testIsLocalHttpWithIPv6(): void
+    {
+        $request = new ServerRequest('GET', 'http://[::1]:8080/', [], null, '1.1', [
+            'HTTP_HOST' => '[::1]:8080'
+        ]);
+
+        $this->assertTrue(CFUtils::isLocalHttp($request));
+    }
+
+    public function testIsLocalHttpWithServerNameFallback(): void
+    {
+        $request = new ServerRequest('GET', 'http://localhost/', [], null, '1.1', [
+            'SERVER_NAME' => 'localhost'
+        ]);
+
+        $this->assertTrue(CFUtils::isLocalHttp($request));
+    }
+
+    public function testIsLocalHttpWithUriFallback(): void
+    {
+        $request = new ServerRequest('GET', 'http://localhost:8080/');
+
+        $this->assertTrue(CFUtils::isLocalHttp($request));
+    }
+
     public function testIsLocalHttpWithCloudHost(): void
     {
         $request = new ServerRequest('GET', 'https://example.run.app/', [], null, '1.1', [

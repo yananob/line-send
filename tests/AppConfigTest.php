@@ -105,4 +105,36 @@ class AppConfigTest extends TestCase
 
         AppConfig::getLineConfig();
     }
+
+    public function testGetLineConfigNonStringTokenValueThrowsException(): void
+    {
+        $config = [
+            'tokens' => ['bot1' => 12345],
+            'target_ids' => ['bot1' => 'target1'],
+        ];
+
+        putenv('LINE_TOKENS_N_TARGETS=' . json_encode($config));
+        $_ENV['LINE_TOKENS_N_TARGETS'] = json_encode($config);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Environment variable LINE_TOKENS_N_TARGETS 'tokens' must only contain non-empty string keys and values.");
+
+        AppConfig::getLineConfig();
+    }
+
+    public function testGetLineConfigEmptyStringTargetIdValueThrowsException(): void
+    {
+        $config = [
+            'tokens' => ['bot1' => 'token1'],
+            'target_ids' => ['bot1' => ''],
+        ];
+
+        putenv('LINE_TOKENS_N_TARGETS=' . json_encode($config));
+        $_ENV['LINE_TOKENS_N_TARGETS'] = json_encode($config);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Environment variable LINE_TOKENS_N_TARGETS 'target_ids' must only contain non-empty string keys and values.");
+
+        AppConfig::getLineConfig();
+    }
 }
